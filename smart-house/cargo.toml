@@ -1,0 +1,4 @@
+[workspace]
+members = ["smart-house", "example"]
+
+resolver = "2"
