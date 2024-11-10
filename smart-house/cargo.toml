@@ -1,4 +1,4 @@
 [workspace]
-members = ["smart-house", "example"]
+members = ["smart-house", "example", "tcp-socket"]
 
 resolver = "2"
