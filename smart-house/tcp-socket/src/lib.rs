@@ -6,9 +6,10 @@ mod client;
 mod error;
 mod server;
 
+#[derive(Debug)]
 pub struct SocketInfo {
-    is_turned_on: bool,
-    power: f64,
+    pub is_turned_on: bool,
+    pub power: f64,
 }
 
 pub trait SocketConnector {

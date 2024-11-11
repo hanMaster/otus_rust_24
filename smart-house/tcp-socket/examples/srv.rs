@@ -1,6 +1,7 @@
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    tcp_socket::SocketServer::serve("127.0.0.1:3456")?;
+    let mut server = tcp_socket::SocketServer::new("127.0.0.1:3456")?;
+    server.serve()?;
     Ok(())
 }

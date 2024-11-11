@@ -1,16 +1,17 @@
 use std::io::{Read, Write};
-use std::net::TcpStream;
+use std::net::{SocketAddr, TcpStream};
 
-use crate::{SocketConnector, SocketInfo};
 use crate::error::{Error, Result};
+use crate::{SocketConnector, SocketInfo};
 
 pub struct SocketClient<'a> {
     addr: &'a str,
 }
 
 impl<'a> SocketClient<'a> {
-    pub fn new(addr: &'a str) -> Self {
-        Self { addr }
+    pub fn new(addr: &'a str) -> Result<Self> {
+        let _: SocketAddr = addr.parse()?;
+        Ok(Self { addr })
     }
 
     fn turn(&self, need_turn_on: bool) -> Result<()> {
@@ -30,11 +31,17 @@ impl SocketConnector for SocketClient<'_> {
     fn get_socket_info(&self) -> Result<SocketInfo> {
         let mut stream = TcpStream::connect(self.addr)?;
         stream.write_all(b"cmd1")?;
-        let mut buf = [0; 12];
+        let mut buf = [0; 15];
         stream.read_exact(&mut buf)?;
+        if &buf[0..6] != b"state:" {
+            return Err(Error::FailGetInfo);
+        }
+        let is_turned_on = buf[6] == 1;
+        let pwr_buf: [u8; 8] = buf[7..].try_into()?;
+        let power = f64::from_be_bytes(pwr_buf);
         Ok(SocketInfo {
-            is_turned_on: false,
-            power: 0.0,
+            is_turned_on,
+            power,
         })
     }
 
