@@ -1,5 +1,6 @@
-use std::io::{Read, Write};
-use std::net::{SocketAddr, TcpStream};
+use std::net::SocketAddr;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::TcpStream;
 
 use crate::error::{Error, Result};
 use crate::{SocketConnector, SocketInfo};
@@ -14,12 +15,12 @@ impl<'a> SocketClient<'a> {
         Ok(Self { addr })
     }
 
-    fn turn(&self, need_turn_on: bool) -> Result<()> {
-        let mut stream = TcpStream::connect(self.addr)?;
+    async fn turn(&self, need_turn_on: bool) -> Result<()> {
+        let mut stream = TcpStream::connect(self.addr).await?;
         let cmd = if need_turn_on { b"cmd2" } else { b"cmd3" };
-        stream.write_all(cmd)?;
+        stream.write_all(cmd).await?;
         let mut buf = [0; 4];
-        stream.read_exact(&mut buf)?;
+        stream.read_exact(&mut buf).await?;
         if &buf != b"done" {
             return Err(Error::FailTurnSocket);
         }
@@ -28,11 +29,11 @@ impl<'a> SocketClient<'a> {
 }
 
 impl SocketConnector for SocketClient<'_> {
-    fn get_socket_info(&self) -> Result<SocketInfo> {
-        let mut stream = TcpStream::connect(self.addr)?;
-        stream.write_all(b"cmd1")?;
+    async fn get_socket_info(&self) -> Result<SocketInfo> {
+        let mut stream = TcpStream::connect(self.addr).await?;
+        stream.write_all(b"cmd1").await?;
         let mut buf = [0; 15];
-        stream.read_exact(&mut buf)?;
+        stream.read_exact(&mut buf).await?;
         if &buf[0..6] != b"state:" {
             return Err(Error::FailGetInfo);
         }
@@ -45,11 +46,11 @@ impl SocketConnector for SocketClient<'_> {
         })
     }
 
-    fn turn_on(&self) -> Result<()> {
-        self.turn(true)
+    async fn turn_on(&self) -> Result<()> {
+        self.turn(true).await
     }
 
-    fn turn_off(&self) -> Result<()> {
-        self.turn(false)
+    async fn turn_off(&self) -> Result<()> {
+        self.turn(false).await
     }
 }
