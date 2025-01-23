@@ -17,7 +17,7 @@ impl SmartHouse {
             devices: BTreeMap::new(),
         }
     }
-    /// Возврвщает список комнат дома в виде строки через запятую
+    /// Возвращает список комнат дома в виде строки через запятую
     pub fn room_list(&self) -> String {
         self.devices
             .keys()
@@ -34,7 +34,7 @@ impl SmartHouse {
         self.devices.insert(room_name.to_string(), list);
     }
 
-    /// Возвращает массив устройсв по названию помещения
+    /// Возвращает массив устройств по названию помещения
     pub fn get_room_devices(&self, room_name: &str) -> Option<&Vec<Box<dyn SmartDevice>>> {
         self.devices.get(room_name)
     }
