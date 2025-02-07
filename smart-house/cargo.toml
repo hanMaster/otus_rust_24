@@ -1,4 +1,16 @@
+[package]
+name = "sh"
+description = "Smart house device controller"
+version = "0.1.0"
+edition = "2021"
+
 [workspace]
-members = ["smart-house", "example", "tcp-socket", "udp-thermo"]
+members = ["smart-house", "example", "tcp-socket", "udp-thermo", "gui", "ffi_socket_lib"]
 
 resolver = "2"
+
+[workspace.dependencies]
+tcp-socket={ version = "0.1", path = "tcp-socket"}
+
+[lib]
+crate-type = ["lib"]
