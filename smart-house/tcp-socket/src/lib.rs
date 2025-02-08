@@ -6,7 +6,7 @@ mod client;
 mod error;
 mod server;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SocketInfo {
     pub is_turned_on: bool,
     pub power: f64,

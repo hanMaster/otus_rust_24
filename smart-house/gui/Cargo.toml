@@ -4,11 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-eframe = "0.30.0"
+eframe = "0.31"
+tcp-socket.workspace = true
 
 env_logger = { version = "0.11.6", default-features = false, features = [
     "auto-color",
     "humantime",
 ] }
+
 log = "0.4.25"
-tokio = { version = "1.43.0", features = ["full"]}
+tokio = { version = "1.43.0", features = ["full"] }
+
