@@ -3,16 +3,26 @@ use axum::routing::{get, post};
 use axum::{Json, Router};
 use axum::extract::Path;
 use serde_json::{json, Value};
+use crate::model::ModelManager;
 
-pub fn routes_init() -> Router {
+pub fn routes_init(_mm: ModelManager) -> Router {
     Router::new()
-        .route("/house", get(get_house_info).post(add_room).delete(remove_room))
+        .route("/house", get(get_house_info).post(add_house).delete(remove_house))
+        .route("/room", post(add_room).delete(remove_room))
         .route("/device", post(add_device).delete(remove_device))
         .route("/device/{id}", get(get_device_info))
 }
 
 async fn get_house_info() -> Result<Json<Value>> {
     let body = Json(json!({"house_info": "my house"}));
+    Ok(body)
+}
+async fn add_house() -> Result<Json<Value>> {
+    let body = Json(json!({"add_house": "add_house"}));
+    Ok(body)
+}
+async fn remove_house() -> Result<Json<Value>> {
+    let body = Json(json!({"remove_house": "remove_house"}));
     Ok(body)
 }
 async fn add_room() -> Result<Json<Value>> {

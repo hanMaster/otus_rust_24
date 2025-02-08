@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6a63af48-3914-4ecc-b707-33934e4d3d88" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../smart-house/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../smart-house/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../smart-house/example/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../smart-house/example/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../smart-house/smart-house/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../smart-house/smart-house/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../smart-house/smart-house/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../smart-house/smart-house/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../smart-house/smart-house/src/sh.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../smart-house/smart-house/src/sh.rs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="FEwyFm2c" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2skG6AWl9O2j7AAzUzrn52lHcMm" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/haMaster/code/rust/otus_rust_24/thiserror_hw",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.first.attach.projects": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6a63af48-3914-4ecc-b707-33934e4d3d88" name="Changes" comment="" />
+      <created>1738991981446</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1738991981446</updated>
+      <workItem from="1738991982508" duration="349000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

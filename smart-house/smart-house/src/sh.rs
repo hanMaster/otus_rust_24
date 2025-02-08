@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::devices::SmartDevice;
-
+use crate::error::{Result, SmartHouseError};
 pub type RoomName = String;
 pub type DeviceList = Vec<Box<dyn SmartDevice>>;
 
@@ -35,8 +35,12 @@ impl SmartHouse {
     }
 
     /// Возвращает массив устройств по названию помещения
-    pub fn get_room_devices(&self, room_name: &str) -> Option<&Vec<Box<dyn SmartDevice>>> {
-        self.devices.get(room_name)
+    pub fn get_room_devices(&self, room_name: &str) -> Result<&DeviceList> {
+        let list = self.devices.get(room_name);
+        if list.is_none() {
+            return Err(SmartHouseError::InvalidName);
+        }
+        Ok(list.unwrap())
     }
 
     /// Формирует отчет по всем помещениям и устройствам дома

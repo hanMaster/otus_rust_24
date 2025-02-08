@@ -28,15 +28,19 @@ fn main() {
 
     println!("Список помещений: {:?}", house.room_list());
 
-    println!(
-        "Устройства на кухне: {:?}",
-        house
-            .get_room_devices("Кухня")
-            .unwrap()
-            .iter()
-            .map(|d| d.get_device_name())
-            .collect::<Vec<_>>()
-    );
+    let dev_result = house.get_room_devices("Кухня1");
+
+    match dev_result {
+        Ok(dev) => {
+            println!(
+                "Устройства на кухне: {:?}",
+                dev.iter().map(|d| d.get_device_name()).collect::<Vec<_>>()
+            );
+        }
+        Err(e) => {
+            eprintln!("Error: {e}")
+        }
+    }
 
     println!("{}", house.report());
 }

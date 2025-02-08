@@ -1,16 +1,9 @@
-use std::fmt::{Display, Formatter};
+use thiserror::Error;
 
 pub type Result<T> = core::result::Result<T, SmartHouseError>;
 
-#[derive(Debug, Clone)]
+#[derive(Error, Debug, Clone)]
 pub enum SmartHouseError {
+    #[error("Room name incorrect")]
     InvalidName,
 }
-
-impl Display for SmartHouseError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{self:?}")
-    }
-}
-
-impl std::error::Error for SmartHouseError {}

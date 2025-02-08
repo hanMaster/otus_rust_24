@@ -1,0 +1,5 @@
+[env]
+
+RUST_LOG="debug"
+
+DB_URL="postgres://app_user:dev_only_pwd@localhost/app_db"
