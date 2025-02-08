@@ -31,6 +31,7 @@ struct MyApp {
     command_result_msg: String,
 }
 
+#[derive(Debug)]
 struct Message {
     is_turned_on: bool,
     power: f64,
@@ -70,7 +71,7 @@ impl MyApp {
         };
         if res.is_ok() {
             // если удалось включить/выключить значит связь с розеткой есть
-            // значит
+            // скорее всего получение статуса пройдет успешно
             let state = c.get_socket_info().await?;
             let msg = Message {
                 is_turned_on: state.is_turned_on,
@@ -133,7 +134,12 @@ impl eframe::App for MyApp {
                 info!("Msg: {:?}", response);
                 self.is_turned_on = response.is_turned_on;
                 self.power = response.power;
+                self.command_result_msg = response.command_result_msg;
                 self.send_in_progress = false;
+            }
+
+            if self.command_result_msg.len() > 0 {
+                ui.label(format!("{}", self.command_result_msg));
             }
         });
     }
