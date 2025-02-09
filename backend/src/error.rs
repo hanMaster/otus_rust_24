@@ -1,7 +1,7 @@
+use crate::model;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use tracing::error;
-use crate::model;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -14,6 +14,7 @@ pub enum Error {
 }
 
 // region:    --- Froms
+
 impl From<model::Error> for Error {
     fn from(value: model::Error) -> Self {
         Error::Model(value)

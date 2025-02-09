@@ -20,7 +20,11 @@ pub struct Config {
 impl Config {
     fn load_from_env() -> Result<Config> {
         Ok(Config {
-            DB_URL: env::var("DB_URL").map_err(|_| Err(Error::ConfigMissingEnv("DB_URL")))?,
+            DB_URL: get_env("DB_URL")?,
         })
     }
+}
+
+fn get_env(name: &'static str) -> Result<String> {
+    env::var(name).map_err(|_| Error::ConfigMissingEnv(name))
 }
