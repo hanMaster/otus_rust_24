@@ -1,56 +1,61 @@
-use std::any::{Any, TypeId};
+use std::f32::consts::PI;
 
-// Определяем объекты, которые будут принимать визитера
-trait Visitable {
-    fn accept<V>(&self, visitor: &mut V)
-    where
-        V: Visitor + ?Sized;
+// Определяем трейт для элементов, которые могут быть посещены
+trait Figure {
+    fn accept(&self, visitor: &dyn Visitor);
 }
 
-struct A;
-impl Visitable for A {
-    fn accept<V>(&self, visitor: &mut V)
-    where
-        V: Visitor + ?Sized,
-    {
-        visitor.visit_any(self as &dyn Any);
+// Конкретные элементы
+struct Circle {
+    radius: f32,
+}
+
+struct Square {
+    side: i32,
+}
+
+impl Figure for Circle {
+    fn accept(&self, visitor: &dyn Visitor) {
+        visitor.accept_circle(self);
     }
 }
 
-struct B;
-impl Visitable for B {
-    fn accept<V>(&self, visitor: &mut V)
-    where
-        V: Visitor + ?Sized,
-    {
-        visitor.visit_any(self as &dyn Any);
+impl Figure for Square {
+    fn accept(&self, visitor: &dyn Visitor) {
+        visitor.accept_square(self);
     }
 }
 
-// Определяем интерфейс визитера
+// Трейт для посетителя
 trait Visitor {
-    fn visit_any(&mut self, obj: &dyn Any);
+    fn accept_circle(&self, element: &Circle);
+    fn accept_square(&self, element: &Square);
 }
 
-// Реализация конкретного визитера
-struct ConcreteVisitor;
+// Конкретный посетитель
+struct AreaVisitor;
 
-impl Visitor for ConcreteVisitor {
-    fn visit_any(&mut self, obj: &dyn Any) {
-        if let Some(a) = obj.downcast_ref::<A>() {
-            println!("Visiting A");
-        } else if let Some(b) = obj.downcast_ref::<B>() {
-            println!("Visiting B");
-        }
+impl Visitor for AreaVisitor {
+    fn accept_circle(&self, figure: &Circle) {
+        let area = figure.radius * figure.radius * PI;
+        println!("Circle area: {area}");
+    }
+
+    fn accept_square(&self, figure: &Square) {
+        let area = figure.side * figure.side;
+        println!("Square area: {area}");
     }
 }
 
 fn main() {
-    let a = A {};
-    let b = B {};
+    let figures: Vec<Box<dyn Figure>> = vec![
+        Box::new(Circle { radius: 4.0 }),
+        Box::new(Square { side: 5 }),
+    ];
 
-    let mut visitor = ConcreteVisitor {};
+    let visitor = AreaVisitor;
 
-    a.accept(&mut visitor);
-    b.accept(&mut visitor);
+    for figure in figures {
+        figure.accept(&visitor);
+    }
 }
