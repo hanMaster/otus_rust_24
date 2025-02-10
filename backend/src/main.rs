@@ -24,7 +24,7 @@ async fn main()-> Result<()> {
     let router_all = Router::new().nest("/api", routes_init(mm.clone()));
 
     // region:    ---Start Server
-    let addr = SocketAddr::from(([127, 0, 0, 1], 5000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 5001));
     let listener = TcpListener::bind(addr).await.unwrap();
     info!(" {:<12} - {addr}\n", "LISTENING");
     axum::serve(listener, router_all).await.unwrap();

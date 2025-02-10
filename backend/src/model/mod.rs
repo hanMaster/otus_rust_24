@@ -3,6 +3,7 @@ use sqlx::postgres::PgPoolOptions;
 use crate::config::config;
 
 mod error;
+mod house;
 
 pub use self::error::{Error, Result};
 

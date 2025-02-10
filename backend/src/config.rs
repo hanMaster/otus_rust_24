@@ -20,7 +20,7 @@ pub struct Config {
 impl Config {
     fn load_from_env() -> Result<Config> {
         Ok(Config {
-            DB_URL: get_env("DB_URL")?,
+            DB_URL: get_env("DATABASE_URL")?,
         })
     }
 }

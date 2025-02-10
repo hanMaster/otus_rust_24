@@ -1,13 +1,17 @@
-use crate::Result;
-use axum::routing::{get, post};
-use axum::{Json, Router};
-use axum::extract::Path;
-use serde_json::{json, Value};
 use crate::model::ModelManager;
+use crate::Result;
+use axum::extract::{Path, State};
+use axum::routing::{get, post};
+use axum::{debug_handler, Json, Router};
+use serde::Deserialize;
+use serde_json::{json, Value};
 
 pub fn routes_init(mm: ModelManager) -> Router {
     Router::new()
-        .route("/house", get(get_house_info).post(add_house).delete(remove_house))
+        .route(
+            "/house",
+            get(get_house_info).post(add_house).delete(remove_house),
+        )
         .route("/room", post(add_room).delete(remove_room))
         .route("/device", post(add_device).delete(remove_device))
         .route("/device/{id}", get(get_device_info))
@@ -18,7 +22,18 @@ async fn get_house_info() -> Result<Json<Value>> {
     let body = Json(json!({"house_info": "my house"}));
     Ok(body)
 }
-async fn add_house() -> Result<Json<Value>> {
+
+#[derive(Deserialize)]
+pub struct HouseForAdd {
+    pub title: String,
+}
+
+#[debug_handler]
+async fn add_house(
+    State(mm): State<ModelManager>,
+    Json(data): Json<HouseForAdd>,
+) -> Result<Json<Value>> {
+    mm.create_house(data.title).await?;
     let body = Json(json!({"add_house": "add_house"}));
     Ok(body)
 }
