@@ -15,3 +15,8 @@ docker exec -it -u postgres pg psql
 ```
 ALTER DATABASE postgres SET log_statement = 'all';
 ```
+
+## dev with watch
+```
+cargo watch -q -c -w ./src -x run
+``` 

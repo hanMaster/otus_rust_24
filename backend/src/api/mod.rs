@@ -5,12 +5,13 @@ use axum::extract::Path;
 use serde_json::{json, Value};
 use crate::model::ModelManager;
 
-pub fn routes_init(_mm: ModelManager) -> Router {
+pub fn routes_init(mm: ModelManager) -> Router {
     Router::new()
         .route("/house", get(get_house_info).post(add_house).delete(remove_house))
         .route("/room", post(add_room).delete(remove_room))
         .route("/device", post(add_device).delete(remove_device))
         .route("/device/{id}", get(get_device_info))
+        .with_state(mm)
 }
 
 async fn get_house_info() -> Result<Json<Value>> {
