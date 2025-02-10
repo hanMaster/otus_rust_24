@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 // Определяем трейт для элементов, которые могут быть посещены
 trait Figure {
-    fn area(&self, visitor: &dyn AreaVisitor);
+    fn accept(&self, visitor: &impl Visitor);
 }
 
 // Конкретные элементы
@@ -15,47 +15,44 @@ struct Square {
 }
 
 impl Figure for Circle {
-    fn area(&self, visitor: &dyn AreaVisitor) {
-        visitor.area_circle(self);
+    fn accept(&self, visitor: &impl Visitor) {
+        visitor.accept_circle(self);
     }
 }
 
 impl Figure for Square {
-    fn area(&self, visitor: &dyn AreaVisitor) {
-        visitor.area_square(self);
+    fn accept(&self, visitor: &impl Visitor) {
+        visitor.accept_square(self);
     }
 }
 
 // Трейт для посетителя
-trait AreaVisitor {
-    fn area_circle(&self, element: &Circle);
-    fn area_square(&self, element: &Square);
+trait Visitor {
+    fn accept_circle(&self, element: &Circle);
+    fn accept_square(&self, element: &Square);
 }
 
 // Конкретный посетитель
-struct ConcreteVisitor;
+struct AreaVisitor;
 
-impl AreaVisitor for ConcreteVisitor {
-    fn area_circle(&self, figure: &Circle) {
+impl Visitor for AreaVisitor {
+    fn accept_circle(&self, figure: &Circle) {
         let area = figure.radius * figure.radius * PI;
         println!("Circle area: {area}");
     }
 
-    fn area_square(&self, figure: &Square) {
+    fn accept_square(&self, figure: &Square) {
         let area = figure.side * figure.side;
         println!("Square area: {area}");
     }
 }
 
 fn main() {
-    let figures: Vec<Box<dyn Figure>> = vec![
-        Box::new(Circle { radius: 4.0 }),
-        Box::new(Square { side: 5 }),
-    ];
+    let circle = Circle { radius: 4.0 };
+    let square = Square { side: 5 };
 
-    let visitor = ConcreteVisitor;
+    let visitor = AreaVisitor;
 
-    for figure in figures {
-        figure.area(&visitor);
-    }
+    circle.accept(&visitor);
+    square.accept(&visitor);
 }
