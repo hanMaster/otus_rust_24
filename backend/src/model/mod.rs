@@ -3,7 +3,9 @@ use sqlx::postgres::PgPoolOptions;
 use crate::config::config;
 
 mod error;
-mod house;
+pub mod house;
+pub mod room;
+pub mod device;
 
 pub use self::error::{Error, Result};
 
