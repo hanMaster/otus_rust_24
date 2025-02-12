@@ -1,6 +1,7 @@
 use crate::error::Result;
 use crate::model::ModelManager;
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use tracing::log::info;
 
 #[derive(Deserialize)]
@@ -8,10 +9,22 @@ pub struct HouseForAdd {
     pub name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 pub struct HouseData {
     pub id: i64,
     pub house_name: String,
+}
+
+#[derive(Serialize)]
+pub struct RoomForReport {
+    room_name: String,
+    device_info: Vec<String>,
+}
+
+#[derive(Serialize)]
+pub struct HouseReport {
+    house_name: String,
+    rooms: Vec<RoomForReport>,
 }
 
 impl ModelManager {
@@ -27,28 +40,19 @@ impl ModelManager {
     }
 
     pub async fn read_house(&self, id: i64) -> Result<HouseData> {
-        let record = sqlx::query!("SELECT * FROM house WHERE id=$1", id)
+        let house = sqlx::query_as("SELECT * FROM house WHERE id=$1")
+            .bind(id)
             .fetch_one(&self.db)
             .await?;
-        let house = HouseData {
-            id,
-            house_name: record.house_name,
-        };
 
         Ok(house)
     }
 
     pub async fn houses_list(&self) -> Result<Vec<HouseData>> {
         info!("get house_list");
-        let rows = sqlx::query!("SELECT * FROM house")
+        let rows = sqlx::query_as("SELECT * FROM house")
             .fetch_all(&self.db)
-            .await?
-            .iter()
-            .map(|i| HouseData {
-                id: i.id,
-                house_name: i.house_name.clone(),
-            })
-            .collect();
+            .await?;
         Ok(rows)
     }
 
@@ -59,5 +63,11 @@ impl ModelManager {
             .execute(&self.db)
             .await?;
         Ok(house)
+    }
+
+    pub async fn house_report(&self, id: i64) -> Result<HouseReport> {
+        let house = self.read_house(id).await?;
+        println!("{}", house.house_name);
+        todo!()
     }
 }

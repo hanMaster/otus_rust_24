@@ -1,15 +1,15 @@
 use crate::model::ModelManager;
 use crate::Result;
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use tracing::log::info;
 
 #[derive(Deserialize)]
 pub struct RoomForAdd {
-    pub house_id: i64,
     pub room_name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 pub struct RoomData {
     pub id: i64,
     pub house_id: i64,
@@ -30,31 +30,20 @@ impl ModelManager {
     }
 
     pub async fn read_room(&self, id: i64) -> Result<RoomData> {
-        let record = sqlx::query!("SELECT * FROM room WHERE id=$1", id)
+        let room = sqlx::query_as("SELECT * FROM room WHERE id=$1")
+            .bind(id)
             .fetch_one(&self.db)
             .await?;
-        let room = RoomData {
-            id,
-            house_id: record.house_id,
-            room_name: record.room_name,
-        };
 
         Ok(room)
     }
 
     pub async fn rooms_list(&self, house_id: i64) -> Result<Vec<RoomData>> {
         info!("get room_list with house_id: {house_id}");
-        let rows = sqlx::query!("SELECT * FROM room WHERE house_id=$1", house_id)
+        let rooms = sqlx::query_as("SELECT * FROM room WHERE house_id=$1").bind(house_id)
             .fetch_all(&self.db)
-            .await?
-            .iter()
-            .map(|i| RoomData {
-                id: i.id,
-                house_id: i.house_id,
-                room_name: i.room_name.clone(),
-            })
-            .collect();
-        Ok(rows)
+            .await?;
+        Ok(rooms)
     }
 
     pub async fn delete_room(&self, id: i64) -> Result<RoomData> {
