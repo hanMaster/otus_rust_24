@@ -1,6 +1,7 @@
 use crate::model;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use std::sync::Arc;
 use tracing::error;
 
 pub type Result<T> = core::result::Result<T, Error>;
@@ -11,6 +12,8 @@ pub enum Error {
     ConfigMissingEnv(&'static str),
     // -- ModelManager
     Model(model::Error),
+    // -- Sqlx
+    Sql(Arc<sqlx::Error>),
 }
 
 // region:    --- Froms
@@ -18,6 +21,12 @@ pub enum Error {
 impl From<model::Error> for Error {
     fn from(value: model::Error) -> Self {
         Error::Model(value)
+    }
+}
+
+impl From<sqlx::Error> for Error {
+    fn from(value: sqlx::Error) -> Self {
+        Error::Sql(Arc::new(value))
     }
 }
 // endregion: --- Froms
@@ -35,10 +44,14 @@ impl std::error::Error for Error {}
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
         error!("->> {:<12} - {self:?}", "INTO_RES");
-        // Create a placeholder Axum response
-        let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
-        // Insert the Error into the response
-        response.extensions_mut().insert(self);
-        response
+
+        match self {
+            Error::Sql(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+            _ => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Something goes wrong".to_string(),
+            )
+                .into_response(),
+        }
     }
 }

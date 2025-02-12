@@ -33,8 +33,10 @@ async fn add_house(
     State(mm): State<ModelManager>,
     Json(data): Json<HouseForAdd>,
 ) -> Result<Json<Value>> {
-    mm.create_house(data.title).await?;
-    let body = Json(json!({"add_house": "add_house"}));
+    let id = mm.create_house(data.title).await?;
+    let body = Json(json!({"house": {
+        "id": id
+    }}));
     Ok(body)
 }
 async fn remove_house() -> Result<Json<Value>> {
