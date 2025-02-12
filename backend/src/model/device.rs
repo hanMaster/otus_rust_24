@@ -67,14 +67,14 @@ impl ModelManager {
     pub async fn get_device_info(&self, device: &DeviceData) -> crate::Result<String> {
         match device.device_type.as_str() {
             "socket" => {
-                // here we make request to TCP Socket by device_ip
+                // here we make async request to TCP Socket by device_ip
                 Ok(format!(
                     "Socket - Name: {}, State: {}, Power: {} Watt",
                     device.device_name, "ON", 120
                 ))
             }
             "thermometer" => {
-                // here we make request to UDP Thermometer by device_ip
+                // here we make async request to UDP Thermometer by device_ip
                 Ok(format!(
                     "Thermometer - Name: {}, Temperature: {} ℃",
                     device.device_name, 24

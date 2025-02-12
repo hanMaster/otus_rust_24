@@ -65,20 +65,27 @@ impl ModelManager {
         Ok(house)
     }
 
-    pub async fn house_report(&self, id: i64) -> Result<()> {
+    pub async fn house_report(&self, id: i64) -> Result<HouseReport> {
         let house = self.read_house(id).await?;
-        let rooms = self.rooms_list(id).await?;
-        println!("{}", house.house_name);
+        let rooms_list = self.rooms_list(id).await?;
+        let mut rooms: Vec<RoomForReport> = vec![];
 
-        for room in rooms {
-            println!("Name: {}", room.room_name);
+        for room in rooms_list {
             let devices = self.devices_list(room.id).await?;
+            let mut device_info: Vec<String> = vec![];
             for device in devices {
                 let info = self.get_device_info(&device).await?;
-                println!("{info}")
+                device_info.push(info);
             }
+            rooms.push(RoomForReport {
+                room_name: room.room_name,
+                device_info,
+            })
         }
 
-        Ok(())
+        Ok(HouseReport {
+            house_name: house.house_name,
+            rooms,
+        })
     }
 }
