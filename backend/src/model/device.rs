@@ -64,8 +64,7 @@ impl ModelManager {
         Ok(device)
     }
 
-    pub async fn get_device_info(&self, id: i64) -> crate::Result<String> {
-        let device = self.read_device(id).await?;
+    pub async fn get_device_info(&self, device: &DeviceData) -> crate::Result<String> {
         match device.device_type.as_str() {
             "socket" => {
                 // here we make request to TCP Socket by device_ip

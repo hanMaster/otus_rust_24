@@ -65,9 +65,20 @@ impl ModelManager {
         Ok(house)
     }
 
-    pub async fn house_report(&self, id: i64) -> Result<HouseReport> {
+    pub async fn house_report(&self, id: i64) -> Result<()> {
         let house = self.read_house(id).await?;
+        let rooms = self.rooms_list(id).await?;
         println!("{}", house.house_name);
-        todo!()
+
+        for room in rooms {
+            println!("Name: {}", room.room_name);
+            let devices = self.devices_list(room.id).await?;
+            for device in devices {
+                let info = self.get_device_info(&device).await?;
+                println!("{info}")
+            }
+        }
+
+        Ok(())
     }
 }
