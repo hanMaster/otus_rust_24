@@ -14,7 +14,6 @@ pub fn timestamp_to_time(ts: &str) -> Result<String> {
     let ts = ts.parse::<u64>()?;
     let d = UNIX_EPOCH + Duration::from_millis(ts);
     let datetime = DateTime::<Utc>::from(d);
-    let timestamp_str = datetime.format("%Y-%m-%d %H:%M:%S.%f").to_string();
-    println!("{timestamp_str}");
+    let timestamp_str = datetime.format("%H:%M").to_string();
     Ok(timestamp_str)
 }

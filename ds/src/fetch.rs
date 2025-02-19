@@ -71,11 +71,6 @@ pub async fn get_data(symbol: &str, interval: i32, limit: i32) -> Result<ChartDa
         data.push(i[3].parse()?);
     }
 
-    x_axis_data.reverse();
-
-    // println!("data {:?}", data);
-    // println!("x_axis {:?}", x_axis_data);
-
     let mut min_max = data.clone();
     min_max.sort_by(|a, b| a.total_cmp(b));
 

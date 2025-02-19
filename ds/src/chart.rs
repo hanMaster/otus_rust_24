@@ -47,19 +47,15 @@ pub async fn gen_candlestick_svg() -> Result<()> {
     let d = get_data("BTCUSDT", 5, 40).await?;
     let mut chart = CandlestickChart::new_with_theme(d.series_list, d.x_axis_data, "vintage");
 
-    println!("min {}", d.min);
-    println!("max {}", d.max);
-
     chart.title_text = "BTCUSDT".to_string();
-
     chart.y_axis_configs[0].axis_min = Some(d.min - 100.00);
     chart.y_axis_configs[0].axis_max = Some(d.max + 100.00);
-
     chart.legend_margin = Some(Box {
         top: 50.0,
         bottom: 10.0,
         ..Default::default()
     });
+
     std::fs::write("candles.svg", chart.svg()?)?;
     Ok(())
 }
