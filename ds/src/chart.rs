@@ -44,9 +44,10 @@ pub fn gen_line_svg() -> Result<()> {
 }
 
 pub async fn gen_candlestick_svg() -> Result<()> {
-    let d = get_data("BTCUSDT", 5, 40).await?;
+    let d = get_data("BTCUSDT", 5, 70).await?;
     let mut chart = CandlestickChart::new_with_theme(d.series_list, d.x_axis_data, "vintage");
 
+    chart.legend_show = Some(false);
     chart.title_text = "BTCUSDT".to_string();
     chart.y_axis_configs[0].axis_min = Some(d.min - 100.00);
     chart.y_axis_configs[0].axis_max = Some(d.max + 100.00);
