@@ -1,7 +1,7 @@
 use crate::config::config;
 use crate::crypto::gen_signature;
 use crate::error::Result;
-use crate::time::{now_timestamp, timestamp_to_time};
+use crate::time::{get_interval_label, now_timestamp, timestamp_to_time};
 use charts_rs::Series;
 use reqwest::Client;
 use serde::Deserialize;
@@ -28,9 +28,10 @@ pub struct ChartData {
     pub x_axis_data: Vec<String>,
     pub min: f32,
     pub max: f32,
+    pub interval_label: String,
 }
 
-pub async fn fetch(symbol: &str, interval: i32, limit: i32) -> Result<DataResult> {
+pub async fn fetch(symbol: &str, interval: &str, limit: i32) -> Result<DataResult> {
     let api_key = &config().api_key;
     let api_url = &config().api_url;
     let recv_window = &config().recv_window;
@@ -55,14 +56,14 @@ pub async fn fetch(symbol: &str, interval: i32, limit: i32) -> Result<DataResult
     Ok(data.result)
 }
 
-pub async fn get_data(symbol: &str, interval: i32, limit: i32) -> Result<ChartData> {
+pub async fn get_data(symbol: &str, interval: &str, limit: i32) -> Result<ChartData> {
     let data = fetch(symbol, interval, limit).await?;
     let mut list = data.list;
     list.reverse();
     let mut data: Vec<f32> = Vec::new();
     let mut x_axis_data: Vec<String> = Vec::new();
     for i in list {
-        let time = timestamp_to_time(&i[0])?;
+        let time = timestamp_to_time(&i[0], interval)?;
         x_axis_data.push(time);
         data.push(i[4].parse()?);
         data.push(i[1].parse()?);
@@ -80,6 +81,7 @@ pub async fn get_data(symbol: &str, interval: i32, limit: i32) -> Result<ChartDa
         series_list: vec![series],
         x_axis_data,
         min: min_max[0],
-        max: *max.unwrap()
+        max: *max.unwrap(),
+        interval_label: get_interval_label(&interval),
     })
 }
