@@ -1,9 +1,8 @@
-use ds::fetch::fetch;
+use ds::chart::gen_candlestick_svg;
 pub use ds::error::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let data = fetch("BTCUSDT", 5, 3).await?;
-    println!("{:#?}", data.list);
+    gen_candlestick_svg().await?;
     Ok(())
 }
