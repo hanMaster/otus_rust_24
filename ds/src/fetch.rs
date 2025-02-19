@@ -1,4 +1,3 @@
-use std::ops::Deref;
 use crate::config::config;
 use crate::crypto::gen_signature;
 use crate::error::Result;
