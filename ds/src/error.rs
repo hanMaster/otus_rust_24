@@ -8,7 +8,6 @@ pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Debug)]
 pub enum Error {
-    Env(dotenvy::Error),
     Var(VarError),
     Fetch(reqwest::Error),
     Canvas(CanvasError),
@@ -21,11 +20,7 @@ pub enum Error {
 }
 
 //region      --- From
-impl From<dotenvy::Error> for Error {
-    fn from(value: dotenvy::Error) -> Self {
-        Error::Env(value)
-    }
-}
+
 impl From<VarError> for Error {
     fn from(value: VarError) -> Self {
         Error::Var(value)

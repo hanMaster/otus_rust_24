@@ -1,19 +1,14 @@
 use crate::error::Result;
 use chrono::prelude::*;
-use std::time::{Duration, UNIX_EPOCH};
 
 pub fn now_timestamp() -> Result<String> {
-    let ts = std::time::SystemTime::now()
-        .duration_since(std::time::SystemTime::UNIX_EPOCH)?
-        .as_millis()
-        .to_string();
+    let ts = Utc::now().timestamp().to_string();
     Ok(ts)
 }
 
 pub fn timestamp_to_time(ts: &str, interval: &str) -> Result<String> {
-    let ts = ts.parse::<u64>()?;
-    let d = UNIX_EPOCH + Duration::from_millis(ts);
-    let datetime = DateTime::<Utc>::from(d);
+    let ts = ts.parse::<i64>()?;
+    let datetime = Utc.timestamp_opt(ts, 0).unwrap();
 
     let timestamp_str = match interval {
         "1" | "5" | "15" | "30" | "60" => datetime.format("%H:%M").to_string(),

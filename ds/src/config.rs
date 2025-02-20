@@ -1,4 +1,3 @@
-use std::env;
 use std::sync::OnceLock;
 use crate::error::Result;
 
@@ -21,11 +20,10 @@ pub struct Config {
 
 impl Config {
     fn load_from_env() -> Result<Config> {
-        dotenvy::dotenv()?;
-        let api_key = env::var("API_KEY")?;
-        let secret_key = env::var("SECRET_KEY")?;
-        let recv_window = env::var("RECV_WINDOW")?;
-        let api_url = env::var("API_URL")?;
+        let api_key = "".to_string();
+        let secret_key = "".to_string();
+        let recv_window = "5000".to_string();
+        let api_url = "https://api.bybit.com".to_string();
         Ok(Config {
             api_key,
             secret_key,

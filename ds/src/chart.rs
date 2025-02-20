@@ -44,7 +44,7 @@ pub fn gen_line_svg() -> Result<()> {
 }
 
 
-pub async fn gen_candlestick_svg() -> Result<()> {
+pub async fn gen_candlestick_svg() -> Result<String> {
     let symbol = "BTCUSDT".to_string();
     let interval = "30";
     let d = get_data(&symbol, interval, 70).await?;
@@ -75,6 +75,6 @@ pub async fn gen_candlestick_svg() -> Result<()> {
         ..Default::default()
     });
 
-    std::fs::write("candles.svg", chart.svg()?)?;
-    Ok(())
+    // std::fs::write("candles.svg", chart.svg()?)?;
+    Ok(chart.svg()?)
 }
