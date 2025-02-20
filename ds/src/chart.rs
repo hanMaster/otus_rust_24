@@ -45,18 +45,19 @@ pub fn gen_line_svg() -> Result<()> {
 
 
 pub async fn gen_candlestick_svg() -> Result<()> {
-    let symbol = "SOLUSDT".to_string();
-    let interval = "W";
+    let symbol = "BTCUSDT".to_string();
+    let interval = "240";
     let d = get_data(&symbol, interval, 70).await?;
     let mut chart = CandlestickChart::new_with_theme(d.series_list, d.x_axis_data, "vintage");
 
+    chart.font_family = "sans-serif".to_string();
     chart.legend_show = Some(false);
     chart.title_text = symbol;
     chart.sub_title_text = format!("Interval: {}", d.interval_label);
     chart.y_axis_configs[0].axis_min = Some(d.min * 0.99);
     chart.y_axis_configs[0].axis_max = Some(d.max * 1.01);
     chart.y_axis_configs[0].axis_margin = Some(Box {
-        left: 12.0,
+        left: 5.0,
         ..Default::default()
     });
     chart.legend_margin = Some(Box {
@@ -68,6 +69,7 @@ pub async fn gen_candlestick_svg() -> Result<()> {
     chart.x_axis_height = 20.0;
     chart.x_axis_margin = Some(Box {
         left: 3.0,
+        top: 3.0,
         ..Default::default()
     });
 
