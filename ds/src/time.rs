@@ -2,12 +2,12 @@ use crate::error::Result;
 use chrono::prelude::*;
 use std::time::{Duration, UNIX_EPOCH};
 
-pub fn now_timestamp() -> String {
-    std::time::SystemTime::now()
-        .duration_since(std::time::SystemTime::UNIX_EPOCH)
-        .unwrap()
+pub fn now_timestamp() -> Result<String> {
+    let ts = std::time::SystemTime::now()
+        .duration_since(std::time::SystemTime::UNIX_EPOCH)?
         .as_millis()
-        .to_string()
+        .to_string();
+    Ok(ts)
 }
 
 pub fn timestamp_to_time(ts: &str, interval: &str) -> Result<String> {

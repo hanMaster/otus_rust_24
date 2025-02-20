@@ -1,6 +1,7 @@
 use charts_rs::CanvasError;
 use std::env::VarError;
 use std::num::{ParseFloatError, ParseIntError};
+use std::time::SystemTimeError;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -13,6 +14,8 @@ pub enum Error {
     Io(std::io::Error),
     ParseFloat(ParseFloatError),
     ParseInt(ParseIntError),
+    Time(SystemTimeError),
+    MinMax,
 }
 
 //region      --- From
@@ -45,15 +48,21 @@ impl From<std::io::Error> for Error {
     }
 }
 
-impl From<ParseFloatError> for Error{
+impl From<ParseFloatError> for Error {
     fn from(value: ParseFloatError) -> Self {
         Error::ParseFloat(value)
     }
 }
 
-impl From<ParseIntError> for Error{
+impl From<ParseIntError> for Error {
     fn from(value: ParseIntError) -> Self {
         Error::ParseInt(value)
+    }
+}
+
+impl From<SystemTimeError> for Error {
+    fn from(value: SystemTimeError) -> Self {
+        Error::Time(value)
     }
 }
 //endregion   --- From

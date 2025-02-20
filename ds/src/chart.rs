@@ -45,8 +45,8 @@ pub fn gen_line_svg() -> Result<()> {
 
 
 pub async fn gen_candlestick_svg() -> Result<()> {
-    let symbol = "BTCUSDT".to_string();
-    let interval = "240";
+    let symbol = "ETHUSDT".to_string();
+    let interval = "D";
     let d = get_data(&symbol, interval, 70).await?;
     let mut chart = CandlestickChart::new_with_theme(d.series_list, d.x_axis_data, "vintage");
 

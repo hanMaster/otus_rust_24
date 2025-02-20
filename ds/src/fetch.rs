@@ -1,6 +1,6 @@
 use crate::config::config;
 use crate::crypto::gen_signature;
-use crate::error::Result;
+use crate::error::{Error, Result};
 use crate::time::{get_interval_label, now_timestamp, timestamp_to_time};
 use charts_rs::Series;
 use reqwest::Client;
@@ -36,12 +36,12 @@ pub async fn fetch(symbol: &str, interval: &str, limit: i32) -> Result<DataResul
     let api_url = &config().api_url;
     let recv_window = &config().recv_window;
 
-    let ts = now_timestamp();
+    let ts = now_timestamp()?;
     let payload = format!(
         "symbol={}&interval={}&limit={}&category=spot",
         symbol, interval, limit
     );
-    let sign = gen_signature(&payload);
+    let sign = gen_signature(&payload)?;
 
     let client = Client::new()
         .get(format!("{}{}?{}", api_url, "/v5/market/kline", payload))
@@ -74,14 +74,15 @@ pub async fn get_data(symbol: &str, interval: &str, limit: i32) -> Result<ChartD
     let mut min_max = data.clone();
     min_max.sort_by(|a, b| a.total_cmp(b));
 
-    let max = min_max.last();
+    let min = *min_max.first().ok_or(Error::MinMax)?;
+    let max = *min_max.last().ok_or(Error::MinMax)?;
 
     let series = Series::new(symbol.to_string(), data);
     Ok(ChartData {
         series_list: vec![series],
         x_axis_data,
-        min: min_max[0],
-        max: *max.unwrap(),
+        min,
+        max,
         interval_label: get_interval_label(&interval),
     })
 }
