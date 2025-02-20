@@ -1,4 +1,5 @@
 use charts_rs::CanvasError;
+use hmac::digest::InvalidLength;
 use std::env::VarError;
 use std::num::{ParseFloatError, ParseIntError};
 use std::time::SystemTimeError;
@@ -16,6 +17,7 @@ pub enum Error {
     ParseInt(ParseIntError),
     Time(SystemTimeError),
     MinMax,
+    Crypto(InvalidLength),
 }
 
 //region      --- From
@@ -63,6 +65,12 @@ impl From<ParseIntError> for Error {
 impl From<SystemTimeError> for Error {
     fn from(value: SystemTimeError) -> Self {
         Error::Time(value)
+    }
+}
+
+impl From<InvalidLength> for Error {
+    fn from(value: InvalidLength) -> Self {
+        Error::Crypto(value)
     }
 }
 //endregion   --- From
