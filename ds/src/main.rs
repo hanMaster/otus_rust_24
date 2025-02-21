@@ -1,4 +1,3 @@
-use leptos::html::HtmlElement;
 use ds::chart::gen_candlestick_svg;
 use leptos::prelude::*;
 
@@ -8,26 +7,23 @@ fn main() {
 }
 
 async fn get_chart() -> String {
-    match gen_candlestick_svg().await {
-        Ok(data) => {data}
-        Err(_) => {"Failed to get Data".to_string()}
-    }
+    gen_candlestick_svg().await.unwrap_or_else(|_| "Failed to get Data".to_string())
 }
 
 #[component]
 fn App() -> impl IntoView {
-    let once = LocalResource::new(move || get_chart());
-    let svg = move || Suspend::new(async move { once.await });
+    let chart_resource = LocalResource::new(move || get_chart());
+
+    let async_result = move || {
+        chart_resource
+            .get()
+            .as_deref()
+            .map(|value| format!("{value}"))
+            .unwrap_or_else(|| "Loading...".into())
+    };
 
     view! {
-        <Suspense
-            // the fallback will show whenever a resource
-            // read "under" the suspense is loading
-            fallback=move || view! { <p>"Loading..."</p> }
-        >
-            <div>
-                { svg }
-            </div>
-        </Suspense>
+        <h1> { "Hello World!" }</h1>
+        <div inner_html = async_result />
     }
 }
