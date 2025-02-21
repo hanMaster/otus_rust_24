@@ -19,7 +19,7 @@ async fn get_chart(symbol: &str, interval: &str) -> String {
 #[component]
 fn App() -> impl IntoView {
     let (symbol, set_symbol) = signal("ETHUSDT");
-    let (interval, set_interval) = signal("5");
+    let (interval, set_interval) = signal("240");
 
     let chart_resource = LocalResource::new(move || get_chart(*symbol.read(), *interval.read()));
 
@@ -27,7 +27,7 @@ fn App() -> impl IntoView {
         chart_resource
             .get()
             .as_deref()
-            .map(|value| format!("{value}"))
+            .map(|value| value.to_string())
             .unwrap_or_else(|| "Loading...".into())
     };
 

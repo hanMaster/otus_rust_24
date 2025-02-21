@@ -8,8 +8,6 @@ use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct DataResult {
-    category: String,
-    symbol: String,
     pub list: Vec<Vec<String>>,
 }
 
@@ -20,7 +18,6 @@ pub struct DataResponse {
     #[serde(rename(deserialize = "retMsg"))]
     ret_msg: String,
     pub result: DataResult,
-    time: u128,
 }
 
 pub struct ChartData {
@@ -86,6 +83,6 @@ pub async fn get_data(symbol: &str, interval: &str, limit: i32) -> Result<ChartD
         x_axis_data,
         min,
         max,
-        interval_label: get_interval_label(&interval),
+        interval_label: get_interval_label(interval),
     })
 }

@@ -2,20 +2,20 @@ use crate::error::Result;
 use chrono::prelude::*;
 
 pub fn now_timestamp() -> Result<String> {
-    let ts = Utc::now().timestamp().to_string();
+    let ts = Utc::now().timestamp_millis().to_string();
     Ok(ts)
 }
 
 pub fn timestamp_to_time(ts: &str, interval: &str) -> Result<String> {
     let ts = ts.parse::<i64>()?;
-    let datetime = Utc.timestamp_opt(ts, 0).unwrap();
+    let datetime = DateTime::from_timestamp_millis(ts).unwrap();
 
     let timestamp_str = match interval {
         "1" | "5" | "15" | "30" | "60" => datetime.format("%H:%M").to_string(),
         "240" => datetime.format("%b %d").to_string(),
         "D" => datetime.format("%b %d").to_string(),
-        "W" => datetime.format("%y %b").to_string(),
-        "M" => datetime.format("%y %b").to_string(),
+        "W" => datetime.format("%Y %b").to_string(),
+        "M" => datetime.format("%Y %m").to_string(),
         _ => datetime.format("%Y-%m-%d %H:%M").to_string(),
     };
 

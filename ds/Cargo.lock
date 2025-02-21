@@ -445,6 +445,7 @@ dependencies = [
  "console_error_panic_hook",
  "hmac",
  "leptos",
+ "log",
  "reqwest",
  "serde",
  "serde_json",
