@@ -17,6 +17,7 @@ pub enum Error {
     Time(SystemTimeError),
     MinMax,
     Crypto(InvalidLength),
+    Request(String),
 }
 
 //region      --- From

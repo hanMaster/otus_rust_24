@@ -53,7 +53,10 @@ pub async fn fetch(symbol: &str, interval: &str, limit: i32) -> Result<DataResul
         .header("Content-Type", "application/json");
 
     let data: DataResponse = client.send().await?.json().await?;
-    Ok(data.result)
+    match data.ret_code {
+        0 => Ok(data.result),
+        _ => Err(Error::Request(data.ret_msg.to_string())),
+    }
 }
 
 pub async fn get_data(symbol: &str, interval: &str, limit: i32) -> Result<ChartData> {

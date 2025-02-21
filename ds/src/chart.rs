@@ -44,17 +44,14 @@ pub fn gen_line_svg() -> Result<()> {
 }
 
 
-pub async fn gen_candlestick_svg() -> Result<String> {
-    let symbol = "BTCUSDT".to_string();
-    let interval = "30";
-    let d = get_data(&symbol, interval, 70).await?;
+pub async fn gen_candlestick_svg(symbol: &str, interval: &str) -> Result<String> {
+    let d = get_data(symbol, interval, 170).await?;
     let mut chart = CandlestickChart::new_with_theme(d.series_list, d.x_axis_data, "vintage");
 
     chart.height = 600.00;
-    chart.width = 800.00;
-    // chart.font_family = "sans-serif".to_string();
+    chart.width = 1200.00;
     chart.legend_show = Some(false);
-    chart.title_text = symbol;
+    chart.title_text = symbol.to_string();
     chart.sub_title_text = format!("Interval: {}", d.interval_label);
     chart.y_axis_configs[0].axis_min = Some(d.min * 0.99);
     chart.y_axis_configs[0].axis_max = Some(d.max * 1.01);
